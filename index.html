@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Catch the Square</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #87ceeb; margin: 0; }
+    #area { position: relative; width: 90vw; max-width: 600px; height: 400px;
+            margin: 20px auto; background: white; border: 4px solid #333; border-radius: 10px; }
+    #box { position: absolute; width: 50px; height: 50px; background: red;
+           border-radius: 8px; cursor: pointer; display: none; }
+    button { font-size: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>Catch the Square!</h1>
+  <p>Score: <span id="score">0</span> | Time left: <span id="time">30</span></p>
+  <button onclick="startGame()">Start</button>
+  <div id="area"><div id="box"></div></div>
+
+  <script>
+    let score = 0, time = 30, playing = false, mover, clock;
+    const box = document.getElementById("box");
+    const area = document.getElementById("area");
+
+    function moveBox() {
+      const x = Math.random() * (area.clientWidth - 50);
+      const y = Math.random() * (area.clientHeight - 50);
+      box.style.left = x + "px";
+      box.style.top = y + "px";
+    }
+
+    box.onclick = function () {
+      if (!playing) return;
+      score++;
+      document.getElementById("score").textContent = score;
+      moveBox();
+    };
+
+    function startGame() {
+      score = 0; time = 30; playing = true;
+      document.getElementById("score").textContent = 0;
+      document.getElementById("time").textContent = 30;
+      box.style.display = "block";
+      moveBox();
+      clearInterval(mover); clearInterval(clock);
+      mover = setInterval(moveBox, 800);
+      clock = setInterval(function () {
+        time--;
+        document.getElementById("time").textContent = time;
+        if (time === 0) {
+          playing = false;
+          clearInterval(mover); clearInterval(clock);
+          box.style.display = "none";
+          alert("Game over! Your score: " + score);
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
